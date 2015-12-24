@@ -36,8 +36,8 @@ $ lein release :patch && lein pprint :version
 "5.4.1.0-SNAPSHOT"
 $ lein change version "leiningen.release/bump-version" && lein pprint :version
 "5.4.1.1-SNAPSHOT"
-$ lein change version "leiningen.release/bump-version" :patch && lein pprint :version
-"5.4.2.0-SNAPSHOT"
+$ lein change version "leiningen.release/bump-version" :build && lein pprint :version
+"5.4.1.2-SNAPSHOT"
 ```
 
 For 3-digit version numbers:
