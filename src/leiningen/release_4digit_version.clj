@@ -1,5 +1,5 @@
 (ns leiningen.release-4digit-version
-  (:require [leiningen.release :as release]))
+  #_(:require [leiningen.release :as release]))
 
 (defn- version-map
   [major minor patch build snapshot]
@@ -22,13 +22,17 @@
     :build {:major major :minor minor :patch patch :build (inc build) :snapshot "SNAPSHOT"}
     :release {:major major :minor minor :patch patch :build build :snapshot nil}))
 
-(defn bump-version
-  [version-str & [level]]
+(defn wrap-with-4d-bump-version
+  "A function intended to be used as a lein hook around `leiningen.release/bump-version`.
+  Adds support for bumping versions that contain four components (:major, :minor,
+  :patch, :build).  Falls back to the upstream function if the version string does
+  not contain 4 components."
+  [f version-str & [level]]
   (if-let [[_ major minor patch build snapshot]
            (re-matches #"(\d+)\.(\d+)\.(\d+)\.(\d+)(?:-(SNAPSHOT))?"
                        version-str)]
     (-> (version-map major minor patch build snapshot)
         (bump-4d-version-map (or level :build))
         version-map->str)
-    (release/bump-version version-str level)))
+    (f version-str level)))
 
