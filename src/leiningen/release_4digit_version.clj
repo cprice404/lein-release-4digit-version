@@ -1,5 +1,5 @@
 (ns leiningen.release-4digit-version
-  #_(:require [leiningen.release :as release]))
+  (:require [leiningen.release :as release]))
 
 (defn- version-map
   [major minor patch build snapshot]
@@ -32,7 +32,7 @@
            (re-matches #"(\d+)\.(\d+)\.(\d+)\.(\d+)(?:-(SNAPSHOT))?"
                        version-str)]
     (-> (version-map major minor patch build snapshot)
-        (bump-4d-version-map (or level :build))
+        (bump-4d-version-map (or level release/*level* :build))
         version-map->str)
-    (f version-str level)))
+    (f version-str (or level release/*level* :patch))))
 

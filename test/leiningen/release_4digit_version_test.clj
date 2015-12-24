@@ -4,6 +4,11 @@
             [leiningen.release :as release]))
 
 (deftest test-bump-version
+  ;; For compatibility with older version of lein, the plugin overrides the
+  ;; default release level with *nil*.  For more details see the comments in the
+  ;; `release-4digit-version.plugin` namespace.
+  (binding [release/*level* nil]
+
   ;; Because the 4d bump-version will be used via a
   ;; hook added to the upstream bump-version, we use
   ;; a partial here to test it.
@@ -31,4 +36,4 @@
     (is (= "1.3.0.0-SNAPSHOT" (bump-version "1.2.3.4-SNAPSHOT" :minor)))
     (is (= "1.3.0.0-SNAPSHOT" (bump-version "1.2.3.4" :minor)))
     (is (= "2.0.0.0-SNAPSHOT" (bump-version "1.6.3.4-SNAPSHOT" :major)))
-    (is (= "2.0.0.0-SNAPSHOT" (bump-version "1.6.3.4" :major)))))
+    (is (= "2.0.0.0-SNAPSHOT" (bump-version "1.6.3.4" :major))))))
